@@ -12,9 +12,9 @@ jobs:
           image: mysql:8.0
           env:
               MYSQL_DATABASE: cloud_data
-              MYSQL_USER: foo
-              MYSQL_PASSWORD: bar
-              MYSQL_ROOT_PASSWORD: bar
+              MYSQL_USER: root
+              MYSQL_PASSWORD: ''
+              MYSQL_ROOT_PASSWORD: ''
           ports:
               - 3306
           options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
@@ -30,7 +30,7 @@ jobs:
           sudo systemctl enable mysql.service
           sudo systemctl start mysql.service
           sudo systemctl status mysql.service
-          sudo mysql -h 127.0.0.1 -ufoo -pbar database < domains.sql
+          sudo mysql -h 127.0.0.1 -u root cloud_data < domains.sql
 
       - name: Build and run Golang code
         run: |
@@ -38,7 +38,7 @@ jobs:
           ./myapp
 
       - name: Export MySQL data
-        run: mysqldump -h localhost -u root -p"testrootpass" cloud_data > exported_data.sql
+        run: sudo mysql -h 127.0.0.1 -u root cloud_data > exported_data.sql
 
       - name: Commit and push changes
         run: |
