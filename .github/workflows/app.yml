@@ -1,0 +1,57 @@
+name: MySQL and Golang Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: vcoder
+          MYSQL_DATABASE: cloud_data
+          MYSQL_USER: root
+          MYSQL_PASSWORD: vcoder
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up MySQL client
+        run: sudo apt-get install -y mysql-client
+
+      - name: Wait for MySQL to be ready
+        run: |
+          until nc -z -v -w30 mysql 3306
+          do
+            echo "Waiting for MySQL to be ready..."
+            sleep 5
+          done
+
+      - name: Import domains.sql
+        run: mysql -h localhost -u test_user -p"vcoder" cloud_data < domains.sql
+
+      - name: Build and run Golang code
+        run: |
+          go build -o myapp
+          ./myapp
+
+      - name: Export MySQL data
+        run: mysqldump -h localhost -u test_user -p"vcoder" cloud_data > exported_data.sql
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+
+          git add exported_data.sql
+          git commit -m "Exported MySQL data"
+          git push origin main
