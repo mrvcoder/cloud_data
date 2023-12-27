@@ -28,8 +28,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up MySQL client
-        run: sudo apt-get install -y mysql-client
+      - name: Set up MySQL server
+        run: |
+        sudo apt-get install mysql-server
 
       - name: Import domains.sql
         run: mysql -h localhost -u root -p"testrootpass" cloud_data < domains.sql
