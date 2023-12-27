@@ -31,14 +31,6 @@ jobs:
       - name: Set up MySQL client
         run: sudo apt-get install -y mysql-client
 
-      - name: Wait for MySQL to be ready
-        run: |
-          until nc -z -v -w30 mysql 3306
-          do
-            echo "Waiting for MySQL to be ready..."
-            sleep 5
-          done
-
       - name: Import domains.sql
         run: mysql -h localhost -u root -p"testrootpass" cloud_data < domains.sql
 
