@@ -29,13 +29,13 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `cloud_data` (
   `id` int(11) NOT NULL,
-  `IP Address` longtext ,
-  `Common Name` longtext ,
+  `IP_Address` longtext ,
+  `Common_Name` longtext ,
   `Organization` longtext ,
   `Locality` longtext ,
   `Province` longtext ,
-  `Subject Alternative DNS Name` longtext ,
-  `Subject Alternative IP address` longtext ,
+  `Subject_Alternative_DNS_Name` longtext ,
+  `Subject_Alternative_IP_address` longtext ,
   `Self-signed` longtext 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
