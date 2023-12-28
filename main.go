@@ -72,11 +72,11 @@ func ConnectToDB() {
 	fmt.Println(dsn)
 	db, err = sql.Open("mysql", dsn)
 	if err != nil {
-		gologger.Fatal().Msg("Error at DB connect !")
+		gologger.Fatal().Msg("Error at DB connect ! " + err.Error())
 	}
 	err = db.Ping()
 	if err != nil {
-		gologger.Fatal().Msg("Error at DB connect !")
+		gologger.Fatal().Msg("Error at DB connect !" + err.Error())
 	}
 	db.SetMaxOpenConns(30)
 	gologger.Info().Msg("Connected to DB !")
