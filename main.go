@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"log"
 	"strconv"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/projectdiscovery/gologger"
@@ -39,12 +41,14 @@ func main() {
 	minValue := 0          // Replace with your minimum value
 	maxValue := file_count // Replace with your maximum value
 
-	for i := minValue; i <= maxValue; i++ {
+	for i := minValue; i < maxValue; i++ {
 		gologger.Info().Msg(fmt.Sprintf("Scanning %d/%d", i+1, maxValue))
 		filename := fmt.Sprintf("ssl%04d", i)
 		csv2sql(filename)
 		gologger.Info().Msg("-------------------------")
 	}
+
+	GetTargetsSubdomains()
 
 }
 
@@ -80,7 +84,7 @@ func ConnectToDB() {
 func csv2sql(csvfilename string) {
 	ExecShell(fmt.Sprintf("./csv2sql_app -f ./cloud/ssl/%s.csv -t cloud_data -k", csvfilename))
 
-	ExecShell(fmt.Sprintf("sed '/PRAGMA foreign_keys=OFF;/d; /BEGIN TRANSACTION;/d; /COMMIT;/d' ./cloud/ssl/SQL-%s.sql > ./raw-%s.sql ; rm ./SQL-%s.sql ./cloud/ssl/%s.csv", csvfilename,
+	ExecShell(fmt.Sprintf("sed '/PRAGMA foreign_keys=OFF;/d; /BEGIN TRANSACTION;/d; /COMMIT;/d; /CREATE TABLE cloud_data/d;' ./SQL-%s.sql > ./raw-%s.sql ; rm ./SQL-%s.sql ./cloud/ssl/%s.csv", csvfilename,
 		csvfilename,
 		csvfilename,
 		csvfilename))
@@ -89,4 +93,53 @@ func csv2sql(csvfilename string) {
 		csvfilename))
 
 	gologger.Info().Msg("Added [" + csvfilename + "] csv to mysql db")
+}
+
+func GetTargetsSubdomains() {
+	d, err := readFileContent("./targets.txt")
+	if d != "" && err == nil {
+		gologger.Info().Msg("Getting Targets Data ...")
+
+		targets := strings.Split(d, "\n")
+		for _, target := range targets {
+			gologger.Info().Msg("Getting [" + target + "] Data ...")
+			subs := []string{}
+			stmt, err := db.Prepare(fmt.Sprintf("SELECT IP_Address , Common_Name , Subject_Alternative_DNS_Name FROM cloud_data WHERE Common_Name LIKE '%%.%s%%' OR Subject_Alternative_DNS_Name LIKE '%%.%s%%'", target,
+				target))
+			if err != nil && err != sql.ErrNoRows {
+				gologger.Error().Msg("error checking data existence:" + err.Error())
+			}
+			defer stmt.Close()
+
+			// Execute the query
+			rows, err := stmt.Query()
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer rows.Close()
+
+			// Iterate over the rows and retrieve the data
+			for rows.Next() {
+				var (
+					IP_Address                   string
+					Common_Name                  string
+					Subject_Alternative_DNS_Name string
+				)
+				if err := rows.Scan(&IP_Address, &Common_Name, &Subject_Alternative_DNS_Name); err != nil {
+					gologger.Error().Msg("error Getting subdomains from db:" + err.Error())
+				}
+
+				data := fmt.Sprintf("%s,%s,%s", IP_Address, Common_Name, Subject_Alternative_DNS_Name)
+
+				subs = append(subs, data)
+			}
+
+			WriteToFile(strings.Join(subs, "\n"), "./"+target+"_data.txt")
+
+			gologger.Info().Msg("Got [" + target + "] Data !")
+		}
+
+		gologger.Info().Msg("Got All Targets Data !")
+
+	}
 }

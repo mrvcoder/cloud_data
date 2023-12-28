@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -28,4 +29,24 @@ func ExecShell(command string) string {
 		gologger.Fatal().Msg("Error in bash ")
 	}
 	return strings.TrimSpace(string(out))
+}
+
+func WriteToFile(content string, filePath string) {
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+	defer file.Close()
+
+	// Text to append to the file
+	textToAppend := content
+
+	// Append the text to the file
+	_, err = file.WriteString(textToAppend)
+	if err != nil {
+		fmt.Println("Error appending to file:", err)
+		return
+	}
+
 }
