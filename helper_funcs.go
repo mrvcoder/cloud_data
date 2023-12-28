@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -30,6 +31,21 @@ func ExecShell(command string) string {
 		gologger.Fatal().Msg("Error in bash ")
 	}
 	return strings.TrimSpace(string(out))
+}
+
+func ExtractHostAndTld(domain string) (string, string) {
+	if domain == "" {
+		return "", ""
+	}
+	u, _ := url.Parse("https://" + domain)
+
+	parts := strings.Split(u.Hostname(), ".")
+	if len(parts) <= 1 {
+		return "", ""
+	}
+	domain = parts[len(parts)-2] + "." + parts[len(parts)-1]
+
+	return strings.Split(domain, ".")[0], strings.Split(domain, ".")[1]
 }
 
 func createFile(filePath, content string) error {

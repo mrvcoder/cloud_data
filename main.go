@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -79,16 +80,34 @@ func GetTargetDomainsData(Datas []Cloud_Data) {
 		for _, target := range targets {
 
 			for _, data := range Datas {
-				if strings.Contains(data.CN, target) || strings.Contains(data.Alternative_DNS_Name, target) {
+
+				tld, hostname := ExtractHostAndTld(target)
+				// Define the regex pattern
+				pattern := fmt.Sprintf(`\.%s\.%s`, hostname, tld)
+
+				// Compile the regex pattern
+				regex, err := regexp.Compile(pattern)
+				if err != nil {
+					fmt.Println("Error compiling regex:", err)
+					return
+				}
+
+				if regex.MatchString(data.CN) || regex.MatchString(data.Alternative_DNS_Name) {
 					data := fmt.Sprintf("\"%s\",\"%s\",\"%s\",\"%s\"", data.IP, data.CN, data.Alternative_DNS_Name, data.Alternative_IP)
 
 					subs = append(subs, data)
 				}
 			}
 
-			createFile("./outputs/"+target+"_data.csv", strings.Join(subs, "\n"))
+			if len(subs) > 1 {
+				createFile("./outputs/"+target+"_data.csv", strings.Join(subs, "\n"))
 
-			gologger.Info().Msg("Got [" + target + "] Data !")
+				gologger.Info().Msg("Got [" + target + "] Data !")
+			} else {
+				gologger.Warning().Msg("No Subs of [" + target + "] found !")
+
+			}
+
 		}
 	} else {
 		gologger.Error().Msg("No Targets Found (./targets.txt)")
