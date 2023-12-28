@@ -78,9 +78,9 @@ func ConnectToDB() {
 }
 
 func csv2sql(csvfilename string) {
-	ExecShell(fmt.Sprintf("./csv2sql -f ./cloud/ssl/%s.csv -t cloud_data -k", csvfilename))
+	ExecShell(fmt.Sprintf("./csv2sql_app -f ./cloud/ssl/%s.csv -t cloud_data -k", csvfilename))
 
-	ExecShell(fmt.Sprintf("sed '/PRAGMA foreign_keys=OFF;/d; /BEGIN TRANSACTION;/d; /COMMIT;/d' ./cloud/ssl/SQL-%s.sql > ./raw-%s.sql ; rm ./cloud/ssl/SQL-%s.sql ./cloud/ssl/%s.csv", csvfilename,
+	ExecShell(fmt.Sprintf("sed '/PRAGMA foreign_keys=OFF;/d; /BEGIN TRANSACTION;/d; /COMMIT;/d' ./cloud/ssl/SQL-%s.sql > ./raw-%s.sql ; rm ./SQL-%s.sql ./cloud/ssl/%s.csv", csvfilename,
 		csvfilename,
 		csvfilename,
 		csvfilename))
