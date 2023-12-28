@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 27, 2023 at 10:09 PM
+-- Generation Time: Dec 28, 2023 at 11:09 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -24,36 +24,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `domains`
+-- Table structure for table `cloud_data`
 --
 
 CREATE TABLE `cloud_data` (
-  `IP_Address` longtext ,
-  `Common_Name` longtext ,
-  `Organization` longtext ,
-  `Locality` longtext ,
-  `Province` longtext ,
-  `Subject_Alternative_DNS_Name` longtext ,
-  `Subject_Alternative_IP_address` longtext ,
-  `Self-signed` longtext 
+  `IP_Address` longtext DEFAULT NULL,
+  `Common_Name` longtext DEFAULT NULL,
+  `Organization` longtext DEFAULT NULL,
+  `Locality` longtext DEFAULT NULL,
+  `Province` longtext DEFAULT NULL,
+  `Subject_Alternative_DNS_Name` longtext DEFAULT NULL,
+  `Subject_Alternative_IP_address` longtext DEFAULT NULL,
+  `Self-signed` longtext DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `domains`
---
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `domains`
---
-
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
