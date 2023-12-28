@@ -31,6 +31,7 @@ CREATE TABLE `cloud_data` (
   `IP_Address` longtext DEFAULT NULL,
   `Common_Name` longtext DEFAULT NULL,
   `Organization` longtext DEFAULT NULL,
+  `Country` longtext DEFAULT NULL,
   `Locality` longtext DEFAULT NULL,
   `Province` longtext DEFAULT NULL,
   `Subject_Alternative_DNS_Name` longtext DEFAULT NULL,
