@@ -41,7 +41,7 @@ func main() {
 
 	for i := minValue; i <= maxValue; i++ {
 		gologger.Info().Msg(fmt.Sprintf("Scanning %d/%d", i+1, maxValue))
-		filename := fmt.Sprintf("ssl%04d.csv", i)
+		filename := fmt.Sprintf("ssl%04d", i)
 		csv2sql(filename)
 		gologger.Info().Msg("-------------------------")
 	}
