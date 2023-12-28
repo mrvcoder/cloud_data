@@ -65,7 +65,7 @@ func GetData() int {
 func ConnectToDB() {
 	username := *db_user
 	password := *db_pass
-	hostname := "localhost"
+	hostname := "127.0.0.1"
 	port := *db_port
 	database := *db_name
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, hostname, port, database)
