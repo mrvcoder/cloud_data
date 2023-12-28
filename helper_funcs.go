@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/projectdiscovery/gologger"
@@ -31,22 +32,19 @@ func ExecShell(command string) string {
 	return strings.TrimSpace(string(out))
 }
 
-func WriteToFile(content string, filePath string) {
-	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0644)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
-	}
-	defer file.Close()
-
-	// Text to append to the file
-	textToAppend := content
-
-	// Append the text to the file
-	_, err = file.WriteString(textToAppend)
-	if err != nil {
-		fmt.Println("Error appending to file:", err)
-		return
+func createFile(filePath, content string) error {
+	// Extract the directory and filename from the provided file path
+	if strings.Contains(filePath, "/") {
+		dir := filepath.Dir(filePath)
+		err := os.MkdirAll(dir, os.ModePerm)
+		if err != nil {
+			return err
+		}
 	}
 
+	err = ioutil.WriteFile(filePath, []byte(content), 0644)
+	if err != nil {
+		return err
+	}
+	return nil
 }
