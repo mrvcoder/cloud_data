@@ -40,13 +40,6 @@ jobs:
           go build -o myapp
           ./myapp
 
-      - name: Create DB structure
-        run: |
-          sudo mysql -h 127.0.0.1 -u root -pvcoder cloud_data < cloud_data.sql
-
-      - name: Export MySQL data
-        run: sudo mysql -h 127.0.0.1 -u root -pvcoder cloud_data > cloud_data.sql
-
       - name: Commit and push changes
         run: |
           git config --local user.email "actions@github.com"
