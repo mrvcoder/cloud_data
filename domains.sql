@@ -31,8 +31,8 @@ CREATE TABLE `domains` (
   `id` int(11) NOT NULL,
   `ip` longtext NOT NULL,
   `domain` longtext NOT NULL,
-  `org` longtext NOT NULL
-  `Alternative_IP` longtext NOT NULL
+  `org` longtext NOT NULL,
+  `Alternative_IP` longtext NOT NULL,
   `Alternative_DNS_Name` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
