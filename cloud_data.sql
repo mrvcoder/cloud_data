@@ -27,13 +27,16 @@ SET time_zone = "+00:00";
 -- Table structure for table `domains`
 --
 
-CREATE TABLE `domains` (
+CREATE TABLE `cloud_data` (
   `id` int(11) NOT NULL,
-  `ip` longtext NOT NULL,
-  `domain` longtext NOT NULL,
-  `org` longtext NOT NULL,
-  `Alternative_IP` longtext NOT NULL,
-  `Alternative_DNS_Name` longtext NOT NULL
+  `IP Address` longtext ,
+  `Common Name` longtext ,
+  `Organization` longtext ,
+  `Locality` longtext ,
+  `Province` longtext ,
+  `Subject Alternative DNS Name` longtext ,
+  `Subject Alternative IP address` longtext ,
+  `Self-signed` longtext 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_persian_ci;
 
 --
@@ -43,7 +46,7 @@ CREATE TABLE `domains` (
 --
 -- Indexes for table `domains`
 --
-ALTER TABLE `domains`
+ALTER TABLE `cloud_data`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -53,8 +56,8 @@ ALTER TABLE `domains`
 --
 -- AUTO_INCREMENT for table `domains`
 --
-ALTER TABLE `domains`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `cloud_data`
+  MODIFY `id` int(11)  AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

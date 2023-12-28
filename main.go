@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jszwec/csvutil"
 	"github.com/projectdiscovery/gologger"
 	"github.com/projectdiscovery/gologger/levels"
 )
@@ -41,15 +40,10 @@ func main() {
 	maxValue := file_count // Replace with your maximum value
 
 	for i := minValue; i <= maxValue; i++ {
+		gologger.Info().Msg(fmt.Sprint("Scanning %d/%d", i+1, maxValue))
 		filename := fmt.Sprintf("ssl%04d.csv", i)
-		file_data, _ := readFileContent("./cloud/ssl/" + filename)
-		var Datas []Cloud_Data
-		if err := csvutil.Unmarshal([]byte(file_data), &Datas); err != nil {
-			gologger.Fatal().Msg("error: " + err.Error())
-		}
-		for _, d := range Datas {
-			AddDomain(d)
-		}
+		csv2sql(filename)
+		gologger.Info().Msg("-------------------------")
 	}
 
 }
@@ -83,34 +77,15 @@ func ConnectToDB() {
 	gologger.Info().Msg("Connected to DB !")
 }
 
-func AddDomain(domain Cloud_Data) {
+func csv2sql(csvfilename string) {
+	ExecShell(fmt.Sprintf("./tool/csv2sql -f %s.csv -t cloud_data -k", csvfilename))
 
-	var rows *sql.Rows
-	SelectedData := ""
-	err := db.QueryRow("SELECT ip FROM `domains` WHERE domain = ?", domain.Domain).Scan(&SelectedData)
+	ExecShell(fmt.Sprintf("sed '/PRAGMA foreign_keys=OFF;/d; /BEGIN TRANSACTION;/d; /COMMIT;/d' ./tool/SQL-%s.sql > ./tool/raw-%s.sql ; rm ./tool/SQL-%s.sql", csvfilename,
+		csvfilename,
+		csvfilename))
 
-	if err != nil && err != sql.ErrNoRows {
-		gologger.Error().Msg("error checking data existence:" + err.Error())
-	}
-	if rows != nil {
-		rows.Close()
-	}
+	ExecShell(fmt.Sprintf("cat ./tool/raw-%s.sql >> cloud_data.sql ; rm ./tool/raw-%s.sql", csvfilename,
+		csvfilename))
 
-	if SelectedData == "" {
-
-		// Insert
-		stmt, err := db.Prepare("INSERT INTO `domains`(`ip`, `domain`, `org`,`Alternative_DNS_Name`,`Alternative_IP`) VALUES ('?','?','?','?','?')")
-		if err != nil {
-			gologger.Error().Msg("error preparing insert statement:" + err.Error())
-		}
-		_, err = stmt.Exec(domain.IP, domain.Domain, domain.Org, domain.Alternative_DNS_Name, domain.Alternative_IP)
-		if err != nil {
-			gologger.Error().Msg("error inserting data:" + err.Error())
-		}
-		if stmt != nil {
-			stmt.Close()
-		}
-
-		gologger.Info().Msg("Added [" + domain.Domain + "] [" + domain.IP + "] to DB !")
-	}
+	gologger.Info().Msg("Added [" + csvfilename + "] csv to mysql db")
 }
