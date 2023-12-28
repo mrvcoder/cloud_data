@@ -32,6 +32,7 @@ type Cloud_Data struct {
 }
 
 func main() {
+	ExecShell(fmt.Sprintf("cat db_init.sql > cloud_data.sql"))
 
 	flag.Parse()
 	gologger.DefaultLogger.SetMaxLevel(levels.LevelDebug)
@@ -83,8 +84,6 @@ func ConnectToDB() {
 
 func csv2sql(csvfilename string) {
 	ExecShell(fmt.Sprintf("./csv2sql_app -f ./cloud/ssl/%s.csv -t cloud_data -k", csvfilename))
-
-	ExecShell(fmt.Sprintf("cat db_init.sql > cloud_data.sql"))
 
 	ExecShell(fmt.Sprintf("sed '/PRAGMA foreign_keys=OFF;/d; /BEGIN TRANSACTION;/d; /COMMIT;/d; /CREATE TABLE cloud_data/d;' ./SQL-%s.sql > ./raw-%s.sql ; rm ./SQL-%s.sql ./cloud/ssl/%s.csv", csvfilename,
 		csvfilename,
