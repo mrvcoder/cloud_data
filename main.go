@@ -40,7 +40,7 @@ func main() {
 	maxValue := file_count // Replace with your maximum value
 
 	for i := minValue; i <= maxValue; i++ {
-		gologger.Info().Msg(fmt.Sprint("Scanning %d/%d", i+1, maxValue))
+		gologger.Info().Msg(fmt.Sprintf("Scanning %d/%d", i+1, maxValue))
 		filename := fmt.Sprintf("ssl%04d.csv", i)
 		csv2sql(filename)
 		gologger.Info().Msg("-------------------------")
