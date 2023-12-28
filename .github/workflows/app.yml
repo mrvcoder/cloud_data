@@ -48,5 +48,5 @@ jobs:
           git config --local user.name "GitHub Actions"
 
           git add exported_data.sql
-          git commit -m "Exported MySQL data"
+          git commit -m "✔️ $(date '+%Y-%m-%d %H:%M:%S') Updated DB"
           git push origin main
