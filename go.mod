@@ -5,6 +5,7 @@ go 1.21.3
 require (
 	github.com/andybalholm/brotli v1.0.6 // indirect
 	github.com/dsnet/compress v0.0.2-0.20210315054119-f66993602bf5 // indirect
+	github.com/go-sql-driver/mysql v1.7.1 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/jszwec/csvutil v1.9.0 // indirect

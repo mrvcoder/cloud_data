@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jszwec/csvutil"
 	"github.com/projectdiscovery/gologger"
 	"github.com/projectdiscovery/gologger/levels"
