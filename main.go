@@ -16,7 +16,7 @@ var (
 	err error
 
 	db_user = flag.String("db_user", "root", "db username")
-	db_pass = flag.String("db_pass", "", "db pass")
+	db_pass = flag.String("db_pass", "vcoder", "db pass")
 	db_port = flag.Int("db_port", 3306, "db port")
 	db_name = flag.String("db_name", "cloud_data", "db name")
 )
