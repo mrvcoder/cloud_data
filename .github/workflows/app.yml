@@ -50,4 +50,4 @@ jobs:
 
           git add cloud_data.sql
           git commit -m "✔️ $(date '+%Y-%m-%d %H:%M:%S') Updated DB"
-          git push origin HEAD:main
+          git push origin HEAD:master
