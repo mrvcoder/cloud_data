@@ -28,7 +28,6 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `cloud_data` (
-  `id` int(11) NOT NULL,
   `IP_Address` longtext ,
   `Common_Name` longtext ,
   `Organization` longtext ,
@@ -46,8 +45,6 @@ CREATE TABLE `cloud_data` (
 --
 -- Indexes for table `domains`
 --
-ALTER TABLE `cloud_data`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -56,9 +53,7 @@ ALTER TABLE `cloud_data`
 --
 -- AUTO_INCREMENT for table `domains`
 --
-ALTER TABLE `cloud_data`
-  MODIFY `id` int(11)  AUTO_INCREMENT;
-COMMIT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
