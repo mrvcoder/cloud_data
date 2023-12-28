@@ -15,7 +15,7 @@ jobs:
           # so we can create and migrate the test database.
           # See: https://hub.docker.com/_/mysql
           MYSQL_DATABASE: cloud_data
-          MYSQL_ROOT_PASSWORD: ''
+          MYSQL_ROOT_PASSWORD: 'vcoder'
         ports:
           # Opens port 3306 on service container and host
           # https://docs.github.com/en/actions/using-containerized-services/about-service-containers
@@ -33,7 +33,7 @@ jobs:
           sudo systemctl enable mysql.service
           sudo systemctl start mysql.service
           sudo systemctl status mysql.service
-          sudo mysql -h 127.0.0.1 -u root cloud_data < domains.sql
+          sudo mysql -h 127.0.0.1 -u root -p vcoder cloud_data < domains.sql
 
       - name: Build and run Golang code
         run: |
@@ -41,7 +41,7 @@ jobs:
           ./myapp
 
       - name: Export MySQL data
-        run: sudo mysql -h 127.0.0.1 -u root cloud_data > exported_data.sql
+        run: sudo mysql -h 127.0.0.1 -u root -p vcoder cloud_data > exported_data.sql
 
       - name: Commit and push changes
         run: |
