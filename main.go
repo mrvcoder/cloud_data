@@ -78,13 +78,13 @@ func ConnectToDB() {
 }
 
 func csv2sql(csvfilename string) {
-	ExecShell(fmt.Sprintf("./tool/csv2sql -f %s.csv -t cloud_data -k", csvfilename))
+	ExecShell(fmt.Sprintf("./csv2sql -f %s.csv -t cloud_data -k", csvfilename))
 
-	ExecShell(fmt.Sprintf("sed '/PRAGMA foreign_keys=OFF;/d; /BEGIN TRANSACTION;/d; /COMMIT;/d' ./tool/SQL-%s.sql > ./tool/raw-%s.sql ; rm ./tool/SQL-%s.sql", csvfilename,
+	ExecShell(fmt.Sprintf("sed '/PRAGMA foreign_keys=OFF;/d; /BEGIN TRANSACTION;/d; /COMMIT;/d' ./SQL-%s.sql > ./raw-%s.sql ; rm ./SQL-%s.sql", csvfilename,
 		csvfilename,
 		csvfilename))
 
-	ExecShell(fmt.Sprintf("cat ./tool/raw-%s.sql >> cloud_data.sql ; rm ./tool/raw-%s.sql", csvfilename,
+	ExecShell(fmt.Sprintf("cat ./raw-%s.sql >> cloud_data.sql ; rm ./raw-%s.sql", csvfilename,
 		csvfilename))
 
 	gologger.Info().Msg("Added [" + csvfilename + "] csv to mysql db")

@@ -33,7 +33,7 @@ jobs:
       
       - name: Create DB structure
         run: |
-          sudo mysql -h 127.0.0.1 -u root -pvcoder cloud_data < domains.sql
+          sudo mysql -h 127.0.0.1 -u root -pvcoder cloud_data < cloud_data.sql
 
       - name: Build and run Golang code
         run: |
@@ -41,13 +41,13 @@ jobs:
           ./myapp
 
       - name: Export MySQL data
-        run: sudo mysql -h 127.0.0.1 -u root -pvcoder cloud_data > exported_data.sql
+        run: sudo mysql -h 127.0.0.1 -u root -pvcoder cloud_data > cloud_data.sql
 
       - name: Commit and push changes
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
 
-          git add exported_data.sql
+          git add cloud_data.sql
           git commit -m "✔️ $(date '+%Y-%m-%d %H:%M:%S') Updated DB"
           git push origin main
