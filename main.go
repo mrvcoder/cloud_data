@@ -68,7 +68,8 @@ func ConnectToDB() {
 	hostname := "127.0.0.1"
 	port := *db_port
 	database := *db_name
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, hostname, port, database)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", username, password, hostname, port, database)
+	fmt.Println(dsn)
 	db, err = sql.Open("mysql", dsn)
 	if err != nil {
 		gologger.Fatal().Msg("Error at DB connect !")
