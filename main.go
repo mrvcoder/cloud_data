@@ -37,8 +37,8 @@ func main() {
 
 	flag.Parse()
 	gologger.DefaultLogger.SetMaxLevel(levels.LevelDebug)
-	file_count := GetData()
-
+	// file_count := GetData()
+	file_count := 1
 	minValue := 0          // Replace with your minimum value
 	maxValue := file_count // Replace with your maximum value
 
@@ -80,7 +80,7 @@ func GetTargetDomainsData(Datas []Cloud_Data) {
 
 			for _, data := range Datas {
 
-				tld, hostname := ExtractHostAndTld(target)
+				hostname, tld := ExtractHostAndTld(target)
 				// Define the regex pattern
 				pattern := fmt.Sprintf(`\.%s\.%s`, hostname, tld)
 
