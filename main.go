@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"flag"
 	"fmt"
 	"regexp"
@@ -14,15 +13,15 @@ import (
 	"github.com/projectdiscovery/gologger/levels"
 )
 
-var (
-	db  *sql.DB
-	err error
+// var (
+// 	db  *sql.DB
+// 	err error
 
-	db_user = flag.String("db_user", "root", "db username")
-	db_pass = flag.String("db_pass", "vcoder", "db pass")
-	db_port = flag.Int("db_port", 3306, "db port")
-	db_name = flag.String("db_name", "cloud_data", "db name")
-)
+// 	db_user = flag.String("db_user", "root", "db username")
+// 	db_pass = flag.String("db_pass", "vcoder", "db pass")
+// 	db_port = flag.Int("db_port", 3306, "db port")
+// 	db_name = flag.String("db_name", "cloud_data", "db name")
+// )
 
 type Cloud_Data struct {
 	IP                   string `csv:"IP Address"`
@@ -39,7 +38,8 @@ func main() {
 
 	flag.Parse()
 	gologger.DefaultLogger.SetMaxLevel(levels.LevelDebug)
-	file_count := GetData()
+	// file_count := GetData()
+	file_count := 1
 	minValue := 0          // Replace with your minimum value
 	maxValue := file_count // Replace with your maximum value
 
@@ -73,9 +73,7 @@ func GetData() int {
 func GetTargetDomainsData(Datas []Cloud_Data) {
 	d, err := readFileContent("./targets.txt")
 	if d != "" && err == nil {
-		subs := []string{
-			`IP Address,Common Name,Organization,Subject Alternative DNS Name,Subject Alternative IP address`,
-		}
+		subs := []string{}
 		targets := strings.Split(d, "\n")
 		for _, target := range targets {
 
@@ -98,12 +96,10 @@ func GetTargetDomainsData(Datas []Cloud_Data) {
 				}
 			}
 
-			if len(subs) > 1 {
+			if len(subs) > 0 {
 				appendToFile("./outputs/"+target+"_data.csv", strings.Join(subs, "\n"))
 				gologger.Info().Msg("Got [" + target + "] Data !")
-				subs = []string{
-					`IP Address,Common Name,Organization,Subject Alternative DNS Name,Subject Alternative IP address`,
-				}
+
 			} else {
 				gologger.Warning().Msg("No Subs of [" + target + "] found !")
 
