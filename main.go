@@ -102,6 +102,7 @@ func GetTargetDomainsData(Datas []Cloud_Data) {
 				}
 				appendToFile("./outputs/"+target+"_data.csv", csv_plain)
 				gologger.Info().Msg("Got [" + target + "] Data !")
+				subs = []string{}
 
 			} else {
 				gologger.Warning().Msg("No Subs of [" + target + "] found !")

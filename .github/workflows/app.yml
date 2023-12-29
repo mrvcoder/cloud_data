@@ -38,6 +38,10 @@ jobs:
       #   run: |
       #     cd csv2sql/ ; go build -o ../csv2sql_app
 
+      - name: reset outputs
+        run: |
+         git rm outputs/*.txt
+
       - name: Build and run Golang code
         run: |
           go build -o myapp
