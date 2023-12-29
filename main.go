@@ -57,7 +57,7 @@ func main() {
 
 	// ConnectToDB()
 	// GetTargetsSubdomains()
-
+	ExecShell("rm cloud/ -rf")
 }
 
 func GetData() int {
