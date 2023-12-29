@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"net/url"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/projectdiscovery/gologger"
@@ -69,5 +71,94 @@ func appendToFile(filePath, content string) error {
 		}
 	}
 
+	maxFileSize := int64(100 * 1024 * 1024) // 100 MB
+	err := splitFileIfLarge(filePath, maxFileSize)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+	}
 	return nil
+}
+
+func splitFileIfLarge(inputFilePath string, maxSize int64) error {
+	// Open the input file
+	inputFile, err := os.Open(inputFilePath)
+	if err != nil {
+		return fmt.Errorf("error opening file: %v", err)
+	}
+	defer inputFile.Close()
+
+	// Get file information to check its size
+	fileInfo, err := inputFile.Stat()
+	if err != nil {
+		return fmt.Errorf("error getting file information: %v", err)
+	}
+
+	// Check if the file size is larger than the specified maximum size
+	if fileInfo.Size() <= maxSize {
+		fmt.Printf("File size (%s) is within the limit. No need to split.\n", formatSize(fileInfo.Size()))
+		return nil
+	}
+
+	// Create a scanner to read the file line by line
+	scanner := bufio.NewScanner(inputFile)
+
+	// Create variables for handling the output files
+	var outputFile *os.File
+	var currentSize int64
+	fileCounter := 1
+
+	// Iterate through the lines of the input file
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		// Check if a new file needs to be created
+		if outputFile == nil || currentSize >= maxSize {
+			if outputFile != nil {
+				// Close the previous output file
+				outputFile.Close()
+			}
+
+			// Create a new output file
+			outputFilePath := fmt.Sprintf("%s_part%d.txt", strings.TrimSuffix(inputFilePath, filepath.Ext(inputFilePath)), fileCounter)
+			fileCounter++
+			outputFile, err = os.Create(outputFilePath)
+			if err != nil {
+				return fmt.Errorf("error creating output file: %v", err)
+			}
+			defer outputFile.Close()
+
+			// Reset the current size for the new file
+			currentSize = 0
+		}
+
+		// Write the line to the current output file
+		_, err := outputFile.WriteString(line + "\n")
+		if err != nil {
+			return fmt.Errorf("error writing to output file: %v", err)
+		}
+
+		// Update the current size
+		currentSize += int64(len(line) + 1) // +1 for the newline character
+	}
+
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("error scanning file: %v", err)
+	}
+
+	fmt.Printf("File successfully split into %d parts.\n", fileCounter-1)
+	return nil
+}
+
+// formatSize formats file size for display
+func formatSize(size int64) string {
+	const unit = 1024
+	if size < unit {
+		return fmt.Sprintf("%d B", size)
+	}
+	div, exp := int64(unit), 0
+	for n := size / unit; n >= unit; n /= unit {
+		div *= unit
+		exp++
+	}
+	return fmt.Sprintf("%.2f %cB", float64(size)/float64(div), "KMGTPE"[exp])
 }
