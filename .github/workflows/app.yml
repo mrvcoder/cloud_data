@@ -40,7 +40,10 @@ jobs:
 
       - name: reset outputs
         run: |
-         git rm outputs/*.txt
+        if ls "$dir"/*.txt 1> /dev/null 2>&1; then
+            echo "There are .txt files in $dir."
+            git rm outputs/*.txt
+        fi
 
       - name: Build and run Golang code
         run: |
