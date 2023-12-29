@@ -97,7 +97,6 @@ func splitFileIfLarge(inputFilePath string, maxSize int64) error {
 
 	// Check if the file size is larger than the specified maximum size
 	if fileInfo.Size() <= maxSize {
-		fmt.Printf("File size (%s) is within the limit. No need to split.\n", formatSize(fileInfo.Size()))
 		return nil
 	}
 
