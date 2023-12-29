@@ -115,6 +115,13 @@ func GetTargetDomainsData(Datas []Cloud_Data) {
 	}
 }
 
+// ==================================================================================================================================
+// these codes was for another way to handle the csv datas but because the final files were so big I changed the flow of app :D
+// ==================================================================================================================================
+//
+//
+//
+//
 // func ConnectToDB() {
 // 	username := *db_user
 // 	password := *db_pass
