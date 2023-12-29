@@ -37,8 +37,7 @@ func main() {
 
 	flag.Parse()
 	gologger.DefaultLogger.SetMaxLevel(levels.LevelDebug)
-	// file_count := GetData()
-	file_count := 1
+	file_count := GetData()
 	minValue := 0          // Replace with your minimum value
 	maxValue := file_count // Replace with your maximum value
 
