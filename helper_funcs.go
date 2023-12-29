@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 
 	"github.com/projectdiscovery/gologger"
@@ -48,19 +47,27 @@ func ExtractHostAndTld(domain string) (string, string) {
 	return strings.Split(domain, ".")[0], strings.Split(domain, ".")[1]
 }
 
-func createFile(filePath, content string) error {
-	// Extract the directory and filename from the provided file path
-	if strings.Contains(filePath, "/") {
-		dir := filepath.Dir(filePath)
-		err := os.MkdirAll(dir, os.ModePerm)
+func appendToFile(filePath, content string) error {
+	// Check if the file exists
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		// If the file doesn't exist, create it with the given content
+		err := ioutil.WriteFile(filePath, []byte(content), 0644)
 		if err != nil {
-			return err
+			return fmt.Errorf("error creating file: %v", err)
+		}
+	} else {
+		// If the file exists, open it and append the content
+		file, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY, 0644)
+		if err != nil {
+			return fmt.Errorf("error opening file: %v", err)
+		}
+		defer file.Close()
+
+		// Append content to the file
+		if _, err := file.WriteString(content); err != nil {
+			return fmt.Errorf("error appending to file: %v", err)
 		}
 	}
 
-	err = ioutil.WriteFile(filePath, []byte(content), 0644)
-	if err != nil {
-		return err
-	}
 	return nil
 }
