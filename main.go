@@ -94,15 +94,16 @@ func GetTargetDomainsData(Datas []Cloud_Data) {
 
 				if regex.MatchString(data.CN) || regex.MatchString(data.Alternative_DNS_Name) {
 					data := fmt.Sprintf("\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"", data.IP, data.CN, data.Org, data.Alternative_DNS_Name, data.Alternative_IP)
-
 					subs = append(subs, data)
 				}
 			}
 
 			if len(subs) > 1 {
 				appendToFile("./outputs/"+target+"_data.csv", strings.Join(subs, "\n"))
-
 				gologger.Info().Msg("Got [" + target + "] Data !")
+				subs = []string{
+					`IP Address,Common Name,Organization,Subject Alternative DNS Name,Subject Alternative IP address`,
+				}
 			} else {
 				gologger.Warning().Msg("No Subs of [" + target + "] found !")
 
