@@ -35,7 +35,7 @@ type Cloud_Data struct {
 func main() {
 	// ExecShell(fmt.Sprintf("cat db_init.sql > cloud_data.sql"))
 	// reinit the process
-	ExecShell("rm outputs/*.txt -rf")
+	ExecShell("rm outputs/*.txt ")
 
 	flag.Parse()
 	gologger.DefaultLogger.SetMaxLevel(levels.LevelDebug)
