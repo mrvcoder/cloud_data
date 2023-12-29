@@ -6,6 +6,5 @@ in `targets.txt` file :D
 - Fork this repo
 - Enable action in your forked repo
 - Edit `targets.txt` file and add your targets (domain or ip)
-
-
-**Actions will run every 7 days**
+  
+**Actions will run every 7 days** And the outputs will be in `outputs/{{YourTarget.txt}}`
