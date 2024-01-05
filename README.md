@@ -1,6 +1,6 @@
 # Cloud Data
 
-## Supporting Clouds
+## Supported clouds
 - AWS
 - Amazon
 - Digitalocean
