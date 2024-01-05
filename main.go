@@ -157,7 +157,7 @@ func GetkaeferjaegerDatas() {
 
 					mini_array := strings.Split(data, ",")
 					subs := mini_array[1:]
-					final_string_data := mini_array[0]
+					final_string_data := mini_array[0] + ","
 
 					for _, sub := range subs {
 						sub = strings.ReplaceAll(sub, "[", "")
@@ -172,9 +172,13 @@ func GetkaeferjaegerDatas() {
 							fmt.Println("Error compiling regex:", err)
 							return
 						}
-
 						if regex.MatchString(sub) {
-							final_string_data += "|" + sub
+
+							if strings.Split(final_string_data, ",")[1] == "" {
+								final_string_data += sub
+							} else {
+								final_string_data += "|" + sub
+							}
 						}
 					}
 
