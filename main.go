@@ -28,7 +28,7 @@ func main() {
 	ExecShell("rm outputs/*.csv ")
 	flag.Parse()
 	gologger.DefaultLogger.SetMaxLevel(levels.LevelDebug)
-	// GetTargetDomains_TricksetData()
+	GetTargetDomains_TricksetData()
 	GetkaeferjaegerDatas()
 
 }
