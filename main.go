@@ -144,13 +144,14 @@ func GetkaeferjaegerDatas() {
 
 			Datas := strings.Split(d, "\n")
 			for _, data := range Datas {
-				data = strings.ReplaceAll(data, "[", "")
-				data = strings.ReplaceAll(data, "]", "")
+
 				mini_array := strings.Split(data, ",")
 				subs := mini_array[1:]
 				final_string_data := mini_array[0]
 
 				for _, sub := range subs {
+					sub = strings.ReplaceAll(sub, "[", "")
+					sub = strings.ReplaceAll(sub, "]", "")
 					hostname, tld := ExtractHostAndTld(target)
 					// Define the regex pattern
 					pattern := fmt.Sprintf(`\.%s\.%s`, hostname, tld)
