@@ -174,7 +174,11 @@ func GetkaeferjaegerDatas() {
 			// create a csv file
 			createFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), "IP Address,Common Name\n")
 			// append data in csv format to it
-			appendToFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), strings.Join(final_data, "\n"))
+			csv_plain := ""
+			for _, d := range final_data {
+				csv_plain += d + "\n"
+			}
+			appendToFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), csv_plain)
 
 		}
 		ExecShell("rm outputs/kaeferjaeger/*.txt ")
