@@ -119,21 +119,20 @@ func GetkaeferjaegerDatas() {
 		"http://kaeferjaeger.gay/sni-ip-ranges/oracle/ipv4_merged_sni.txt",
 	}
 
-	gologger.Info().Msg("Got kaeferjaeger Files !")
 	d, err := readFileContent("./targets.txt")
 
 	if d != "" && err == nil {
 		targets := strings.Split(d, "\n")
 		for _, filelink := range datsets {
-
+			fmt.Println(filelink)
 			parsedURL, err := url.Parse(filelink)
 			if err != nil {
 				gologger.Fatal().Msg("Error parsing URL: " + err.Error())
 				return
 			}
-			fmt.Println(filelink)
 			fileName := path.Base(parsedURL.Path)
 			resp, err := makeHTTPRequest(filelink)
+			fmt.Println(resp[:200])
 			if err != nil {
 				gologger.Fatal().Msg("Error make http req on :" + err.Error())
 			}
@@ -141,6 +140,7 @@ func GetkaeferjaegerDatas() {
 			if err != nil {
 				gologger.Fatal().Msg("Error make http req on :" + err.Error())
 			}
+			gologger.Info().Msg("Got kaeferjaeger Files !")
 
 			for _, target := range targets {
 				d := ExecShell(fmt.Sprintf("cat ./outputs/kaeferjaeger/%s | grep -F \".%s\" | sed -E 's/([^ ]+:[0-9]+) -- \\[([^ ]+( \\*.[^ ]+)?)\\]/\\1,\\2/' | sed 's/ /,/g'", fileName, target))
