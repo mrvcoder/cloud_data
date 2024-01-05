@@ -157,33 +157,36 @@ func GetkaeferjaegerDatas() {
 				for _, data := range Datas {
 
 					mini_array := strings.Split(data, ",")
-					subs := mini_array[1:]
-					final_string_data := mini_array[0] + ","
+					if mini_array[0] != "" {
 
-					for _, sub := range subs {
-						sub = strings.ReplaceAll(sub, "[", "")
-						sub = strings.ReplaceAll(sub, "]", "")
-						hostname, tld := ExtractHostAndTld(target)
-						// Define the regex pattern
-						pattern := fmt.Sprintf(`\.%s\.%s`, hostname, tld)
+						subs := mini_array[1:]
+						final_string_data := mini_array[0] + ","
 
-						// Compile the regex pattern
-						regex, err := regexp.Compile(pattern)
-						if err != nil {
-							fmt.Println("Error compiling regex:", err)
-							return
-						}
-						if regex.MatchString(sub) {
+						for _, sub := range subs {
+							sub = strings.ReplaceAll(sub, "[", "")
+							sub = strings.ReplaceAll(sub, "]", "")
+							hostname, tld := ExtractHostAndTld(target)
+							// Define the regex pattern
+							pattern := fmt.Sprintf(`\.%s\.%s`, hostname, tld)
 
-							if strings.Split(final_string_data, ",")[1] == "" {
-								final_string_data += sub
-							} else {
-								final_string_data += "|" + sub
+							// Compile the regex pattern
+							regex, err := regexp.Compile(pattern)
+							if err != nil {
+								fmt.Println("Error compiling regex:", err)
+								return
+							}
+							if regex.MatchString(sub) {
+
+								if strings.Split(final_string_data, ",")[1] == "" {
+									final_string_data += sub
+								} else {
+									final_string_data += "|" + sub
+								}
 							}
 						}
-					}
 
-					final_data = append(final_data, final_string_data)
+						final_data = append(final_data, final_string_data)
+					}
 				}
 
 				filePath := fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target)
@@ -197,6 +200,7 @@ func GetkaeferjaegerDatas() {
 				for _, d := range final_data {
 					csv_plain += d + "\n"
 				}
+				csv_plain = strings.TrimSpace(csv_plain)
 				appendToFile(filePath, csv_plain)
 			}
 		}
