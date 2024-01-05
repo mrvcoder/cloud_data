@@ -124,7 +124,7 @@ func GetkaeferjaegerDatas() {
 	if d != "" && err == nil {
 		targets := strings.Split(d, "\n")
 		for _, filelink := range datsets {
-			fmt.Println(filelink)
+			fmt.Println()
 			parsedURL, err := url.Parse(filelink)
 			if err != nil {
 				gologger.Fatal().Msg("Error parsing URL: " + err.Error())
@@ -132,7 +132,6 @@ func GetkaeferjaegerDatas() {
 			}
 			fileName := path.Base(parsedURL.Path)
 			resp, err := makeHTTPRequest(filelink)
-			fmt.Println(resp[:200])
 			if err != nil {
 				gologger.Fatal().Msg("Error make http req on :" + err.Error())
 			}
@@ -140,12 +139,12 @@ func GetkaeferjaegerDatas() {
 			if err != nil {
 				gologger.Fatal().Msg("Error make http req on :" + err.Error())
 			}
-			gologger.Info().Msg("Got kaeferjaeger Files !")
+			gologger.Info().Msg("Got " + filelink + " File !")
 
 			for _, target := range targets {
 				d := ExecShell(fmt.Sprintf("cat ./outputs/kaeferjaeger/%s | grep -F \".%s\" | sed -E 's/([^ ]+:[0-9]+) -- \\[([^ ]+( \\*.[^ ]+)?)\\]/\\1,\\2/' | sed 's/ /,/g'", fileName, target))
 				final_data = []string{}
-
+				fmt.Println(d[:500])
 				Datas := strings.Split(d, "\n")
 				for _, data := range Datas {
 
