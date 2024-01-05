@@ -146,7 +146,7 @@ func GetkaeferjaegerDatas() {
 			for _, data := range Datas {
 				mini_array := strings.Split(data, ",")
 				subs := mini_array[1:]
-				final_string_data := mini_array[0] + ","
+				final_string_data := mini_array[0]
 
 				for _, sub := range subs {
 					hostname, tld := ExtractHostAndTld(target)
@@ -168,10 +168,11 @@ func GetkaeferjaegerDatas() {
 				final_data = append(final_data, final_string_data)
 			}
 
-			err := WriteCSV(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), []string{"IP Address", "Common Name"}, final_data)
-			if err != nil {
-				gologger.Fatal().Msg("Error creating csv file : " + err.Error())
-			}
+			// create a csv file
+			createFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), "IP Address,Common Name")
+			// append data in csv format to it
+			appendToFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), strings.Join(final_data, "\n"))
+
 		}
 		ExecShell("rm outputs/kaeferjaeger/*.txt ")
 	} else {
