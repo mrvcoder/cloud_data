@@ -63,7 +63,9 @@ func GetTargetDomains_TricksetData() {
 			subs := []string{}
 			targets := strings.Split(d, "\n")
 			for _, target := range targets {
-
+				if target == "" {
+					continue
+				}
 				for _, data := range Datas {
 
 					hostname, tld := ExtractHostAndTld(target)
@@ -151,6 +153,9 @@ func GetkaeferjaegerDatas() {
 			gologger.Info().Msg("Got " + filelink + " File !")
 
 			for _, target := range targets {
+				if target == "" {
+					continue
+				}
 				d := ExecShell(fmt.Sprintf("cat ./outputs/kaeferjaeger/%s | grep -F \".%s\" | sed -E 's/([^ ]+:[0-9]+) -- \\[([^ ]+( \\*.[^ ]+)?)\\]/\\1,\\2/' | sed 's/ /,/g'", fileName, target))
 				final_data = []string{}
 				Datas := strings.Split(d, "\n")
