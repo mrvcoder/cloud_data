@@ -144,7 +144,6 @@ func GetkaeferjaegerDatas() {
 			for _, target := range targets {
 				d := ExecShell(fmt.Sprintf("cat ./outputs/kaeferjaeger/%s | grep -F \".%s\" | sed -E 's/([^ ]+:[0-9]+) -- \\[([^ ]+( \\*.[^ ]+)?)\\]/\\1,\\2/' | sed 's/ /,/g'", fileName, target))
 				final_data = []string{}
-				fmt.Println(d[:500])
 				Datas := strings.Split(d, "\n")
 				for _, data := range Datas {
 
