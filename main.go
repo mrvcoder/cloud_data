@@ -90,7 +90,7 @@ func GetTargetDomains_TricksetData() {
 						createFile(filePath, "IP Address,Common Name,Organization,Subject Alternative DNS Name,Subject Alternative IP address\n")
 					}
 
-					csv_plain := "\n"
+					csv_plain := ""
 					for _, d := range subs {
 						csv_plain += d + "\n"
 					}
@@ -192,7 +192,7 @@ func GetkaeferjaegerDatas() {
 				}
 
 				// append data in csv format to it
-				csv_plain := "\n"
+				csv_plain := ""
 				for _, d := range final_data {
 					csv_plain += d + "\n"
 				}
