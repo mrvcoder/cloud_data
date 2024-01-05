@@ -187,7 +187,7 @@ func GetkaeferjaegerDatas() {
 				}
 
 				// append data in csv format to it
-				csv_plain := ""
+				csv_plain := "\n"
 				for _, d := range final_data {
 					csv_plain += d + "\n"
 				}
