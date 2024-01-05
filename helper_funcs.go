@@ -2,8 +2,10 @@ package main
 
 import (
 	"bufio"
+	"encoding/csv"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"net/url"
 	"os"
 	"os/exec"
@@ -22,6 +24,24 @@ func readFileContent(filePath string) (string, error) {
 
 	// Convert the content to a string and return
 	return string(content), nil
+}
+
+// Write File
+func createFile(filePath, content string) error {
+	// Extract the directory and filename from the provided file path
+	if strings.Contains(filePath, "/") {
+		dir := filepath.Dir(filePath)
+		err := os.MkdirAll(dir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	err := ioutil.WriteFile(filePath, []byte(content), 0644)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // execute bash shell commands
@@ -162,4 +182,46 @@ func formatSize(size int64) string {
 		exp++
 	}
 	return fmt.Sprintf("%.2f %cB", float64(size)/float64(div), "KMGTPE"[exp])
+}
+
+func makeHTTPRequest(url string) (string, error) {
+	// Make a GET request to the specified URL
+	response, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer response.Body.Close()
+
+	// Read the response body
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return "", err
+	}
+
+	// Convert the response body to a string and return
+	return string(body), nil
+}
+
+// WriteCSV writes data to a CSV file
+func WriteCSV(filename string, header []string, data []string) error {
+	file, err := os.Create(filename)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	// Write the header to the CSV file
+	if err := writer.Write(header); err != nil {
+		return err
+	}
+
+	// Write the data to the CSV file
+	if err := writer.Write(data); err != nil {
+		return err
+	}
+
+	return nil
 }
