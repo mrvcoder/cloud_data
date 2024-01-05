@@ -197,6 +197,7 @@ func GetkaeferjaegerDatas() {
 				for _, d := range final_data {
 					csv_plain += d + "\n"
 				}
+				csv_plain = strings.TrimSpace(csv_plain)
 				appendToFile(filePath, csv_plain)
 			}
 		}
