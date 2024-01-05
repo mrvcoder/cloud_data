@@ -174,7 +174,7 @@ func GetkaeferjaegerDatas() {
 						}
 
 						if regex.MatchString(sub) {
-							final_string_data += "," + sub
+							final_string_data += "|" + sub
 						}
 					}
 
