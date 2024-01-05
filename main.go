@@ -82,11 +82,18 @@ func GetTargetDomains_TricksetData() {
 				}
 
 				if len(subs) > 0 {
+
+					filePath := "./outputs/" + target + "_data.csv"
+					if _, err := os.Stat(filePath); os.IsNotExist(err) {
+						// create a csv file
+						createFile(filePath, "IP Address,Common Name,Organization,Subject Alternative DNS Name,Subject Alternative IP address\n")
+					}
+
 					csv_plain := ""
 					for _, d := range subs {
 						csv_plain += d + "\n"
 					}
-					appendToFile("./outputs/"+target+"_data.csv", csv_plain)
+					appendToFile(filePath, csv_plain)
 					gologger.Info().Msg("Got [" + target + "] Data !")
 					subs = []string{}
 
@@ -173,14 +180,18 @@ func GetkaeferjaegerDatas() {
 					final_data = append(final_data, final_string_data)
 				}
 
-				// create a csv file
-				createFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), "IP Address,Common Name\n")
+				filePath := fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target)
+				if _, err := os.Stat(filePath); os.IsNotExist(err) {
+					// create a csv file
+					createFile(filePath, "IP Address,Common Name\n")
+				}
+
 				// append data in csv format to it
 				csv_plain := ""
 				for _, d := range final_data {
 					csv_plain += d + "\n"
 				}
-				appendToFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), csv_plain)
+				appendToFile(filePath, csv_plain)
 			}
 		}
 

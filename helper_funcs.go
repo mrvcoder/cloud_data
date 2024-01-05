@@ -73,8 +73,7 @@ func appendToFile(filePath, content string) error {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		// If the file doesn't exist, create it with the given content
 
-		init_content := "IP Address,Common Name,Organization,Subject Alternative DNS Name,Subject Alternative IP address\n" + content
-		err := ioutil.WriteFile(filePath, []byte(init_content), 0644)
+		err := ioutil.WriteFile(filePath, []byte(content), 0644)
 		if err != nil {
 			return fmt.Errorf("error creating file: %v", err)
 		}
