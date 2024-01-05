@@ -25,6 +25,7 @@ type TrickSetCloud_Data struct {
 
 func main() {
 	ExecShell("rm outputs/*.txt ")
+	ExecShell("rm outputs/kaeferjaeger/*.csv ")
 	ExecShell("rm outputs/*.csv ")
 	flag.Parse()
 	gologger.DefaultLogger.SetMaxLevel(levels.LevelDebug)
