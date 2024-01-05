@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"encoding/csv"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -200,28 +199,4 @@ func makeHTTPRequest(url string) (string, error) {
 
 	// Convert the response body to a string and return
 	return string(body), nil
-}
-
-// WriteCSV writes data to a CSV file
-func WriteCSV(filename string, header []string, data []string) error {
-	file, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	writer := csv.NewWriter(file)
-	defer writer.Flush()
-
-	// Write the header to the CSV file
-	if err := writer.Write(header); err != nil {
-		return err
-	}
-
-	// Write the data to the CSV file
-	if err := writer.Write(data); err != nil {
-		return err
-	}
-
-	return nil
 }

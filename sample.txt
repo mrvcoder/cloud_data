@@ -1,4 +1,0 @@
-3.0.0.155:443 -- [digipep.biz *.digipep.biz]
-3.0.0.58:443 -- [salin-dev.riderspitstop.ph]
-3.0.0.120:443 -- [sssarumi.id *.harumi.id]
-3.0.0.74:443 -- [fresco-tech.com]

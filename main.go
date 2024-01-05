@@ -144,6 +144,8 @@ func GetkaeferjaegerDatas() {
 
 			Datas := strings.Split(d, "\n")
 			for _, data := range Datas {
+				data = strings.ReplaceAll(data, "[", "")
+				data = strings.ReplaceAll(data, "]", "")
 				mini_array := strings.Split(data, ",")
 				subs := mini_array[1:]
 				final_string_data := mini_array[0]
@@ -169,7 +171,7 @@ func GetkaeferjaegerDatas() {
 			}
 
 			// create a csv file
-			createFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), "IP Address,Common Name")
+			createFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), "IP Address,Common Name\n")
 			// append data in csv format to it
 			appendToFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), strings.Join(final_data, "\n"))
 
