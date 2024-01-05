@@ -89,7 +89,7 @@ func GetTargetDomains_TricksetData() {
 						createFile(filePath, "IP Address,Common Name,Organization,Subject Alternative DNS Name,Subject Alternative IP address\n")
 					}
 
-					csv_plain := ""
+					csv_plain := "\n"
 					for _, d := range subs {
 						csv_plain += d + "\n"
 					}
