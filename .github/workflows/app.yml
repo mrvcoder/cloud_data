@@ -14,7 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: update golang
       - uses: actions/setup-go@v4
         with:
           go-version: '>=1.21.5'
