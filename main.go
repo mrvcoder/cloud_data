@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"net/url"
+	"os"
 	"path"
 	"regexp"
 	"strconv"
@@ -97,6 +98,8 @@ func GetTargetDomains_TricksetData() {
 			}
 		} else {
 			gologger.Warning().Msg("No Targets Found (./targets.txt)")
+			gologger.Warning().Msg("Exiting ...")
+			os.Exit(1)
 		}
 		gologger.Info().Msg("-------------------------")
 	}
@@ -116,73 +119,77 @@ func GetkaeferjaegerDatas() {
 		"http://kaeferjaeger.gay/sni-ip-ranges/oracle/ipv4_merged_sni.txt",
 	}
 
-	for _, link := range datsets {
-		parsedURL, err := url.Parse(link)
-		if err != nil {
-			gologger.Fatal().Msg("Error parsing URL: " + err.Error())
-			return
-		}
-
-		fileName := path.Base(parsedURL.Path)
-		resp, err := makeHTTPRequest(link)
-		if err != nil {
-			gologger.Fatal().Msg("Error make http req on :" + err.Error())
-		}
-		err = createFile("./outputs/kaeferjaeger/"+fileName, resp)
-		if err != nil {
-			gologger.Fatal().Msg("Error make http req on :" + err.Error())
-		}
-	}
-
 	gologger.Info().Msg("Got kaeferjaeger Files !")
 	d, err := readFileContent("./targets.txt")
 
 	if d != "" && err == nil {
 		targets := strings.Split(d, "\n")
-		for _, target := range targets {
-			d := ExecShell(fmt.Sprintf("cat ./outputs/kaeferjaeger/*.txt | grep -F \".%s\" | sed -E 's/([^ ]+:[0-9]+) -- \\[([^ ]+( \\*.[^ ]+)?)\\]/\\1,\\2/' | sed 's/ /,/g'", target))
+		for _, filelink := range datsets {
 
-			Datas := strings.Split(d, "\n")
-			for _, data := range Datas {
+			parsedURL, err := url.Parse(filelink)
+			if err != nil {
+				gologger.Fatal().Msg("Error parsing URL: " + err.Error())
+				return
+			}
+			fmt.Println(filelink)
+			fileName := path.Base(parsedURL.Path)
+			resp, err := makeHTTPRequest(filelink)
+			if err != nil {
+				gologger.Fatal().Msg("Error make http req on :" + err.Error())
+			}
+			err = createFile("./outputs/kaeferjaeger/"+fileName, resp)
+			if err != nil {
+				gologger.Fatal().Msg("Error make http req on :" + err.Error())
+			}
 
-				mini_array := strings.Split(data, ",")
-				subs := mini_array[1:]
-				final_string_data := mini_array[0]
+			for _, target := range targets {
+				d := ExecShell(fmt.Sprintf("cat ./outputs/kaeferjaeger/%s | grep -F \".%s\" | sed -E 's/([^ ]+:[0-9]+) -- \\[([^ ]+( \\*.[^ ]+)?)\\]/\\1,\\2/' | sed 's/ /,/g'", fileName, target))
+				final_data = []string{}
 
-				for _, sub := range subs {
-					sub = strings.ReplaceAll(sub, "[", "")
-					sub = strings.ReplaceAll(sub, "]", "")
-					hostname, tld := ExtractHostAndTld(target)
-					// Define the regex pattern
-					pattern := fmt.Sprintf(`\.%s\.%s`, hostname, tld)
+				Datas := strings.Split(d, "\n")
+				for _, data := range Datas {
 
-					// Compile the regex pattern
-					regex, err := regexp.Compile(pattern)
-					if err != nil {
-						fmt.Println("Error compiling regex:", err)
-						return
+					mini_array := strings.Split(data, ",")
+					subs := mini_array[1:]
+					final_string_data := mini_array[0]
+
+					for _, sub := range subs {
+						sub = strings.ReplaceAll(sub, "[", "")
+						sub = strings.ReplaceAll(sub, "]", "")
+						hostname, tld := ExtractHostAndTld(target)
+						// Define the regex pattern
+						pattern := fmt.Sprintf(`\.%s\.%s`, hostname, tld)
+
+						// Compile the regex pattern
+						regex, err := regexp.Compile(pattern)
+						if err != nil {
+							fmt.Println("Error compiling regex:", err)
+							return
+						}
+
+						if regex.MatchString(sub) {
+							final_string_data += "," + sub
+						}
 					}
 
-					if regex.MatchString(sub) {
-						final_string_data += "," + sub
-					}
+					final_data = append(final_data, final_string_data)
 				}
 
-				final_data = append(final_data, final_string_data)
+				// create a csv file
+				createFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), "IP Address,Common Name\n")
+				// append data in csv format to it
+				csv_plain := ""
+				for _, d := range final_data {
+					csv_plain += d + "\n"
+				}
+				appendToFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), csv_plain)
 			}
-
-			// create a csv file
-			createFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), "IP Address,Common Name\n")
-			// append data in csv format to it
-			csv_plain := ""
-			for _, d := range final_data {
-				csv_plain += d + "\n"
-			}
-			appendToFile(fmt.Sprintf("./outputs/kaeferjaeger/%s.csv", target), csv_plain)
-
 		}
+
 		ExecShell("rm outputs/kaeferjaeger/*.txt ")
 	} else {
 		gologger.Warning().Msg("No Targets Found (./targets.txt)")
+		gologger.Warning().Msg("Exiting ...")
+		os.Exit(1)
 	}
 }
