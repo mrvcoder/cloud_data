@@ -34,16 +34,16 @@ jobs:
 
       - name: Commit and push changes
         run: |
-        if ! git diff --quiet; then
-          # If not clean, add all changes and commit
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add outputs/*
-          git commit -m "✔️ $(date '+%Y-%m-%d %H:%M:%S') Created"
-          git push origin HEAD:master
-          echo "Changes committed successfully."
-        else
-          echo "No Changes"
-        fi
+          if ! git diff --quiet; then
+            # If not clean, add all changes and commit
+            git config --local user.email "actions@github.com"
+            git config --local user.name "GitHub Actions"
+            git add outputs/*
+            git commit -m "✔️ $(date '+%Y-%m-%d %H:%M:%S') Created"
+            git push origin HEAD:master
+            echo "Changes committed successfully."
+          else
+            echo "No Changes"
+          fi
           
           
