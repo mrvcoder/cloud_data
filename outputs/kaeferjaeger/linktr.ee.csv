@@ -1,15 +1,9 @@
 IP Address,Common Name
-52.88.181.223:443,profiles-api.qa.linktr.ee
+52.88.12.248:443,qa.shopify-store.linktr.ee
+52.88.166.160:443,userinfo.production.linktr.ee
+52.88.212.130:443,authiamapi.qa.linktr.ee
 52.88.232.47:443,lttransactions.qa.linktr.ee
+52.88.241.178:443,monolith-qa-golf.linktr.ee
 52.88.252.191:443,matching.production.linktr.ee
+52.89.21.133:443,userinfo.production.linktr.ee
 52.89.188.208:443,monolith-qa-echo.linktr.ee
-54.68.7.80:443,backstage.platform.linktr.ee
-54.69.27.93:443,matching.production.linktr.ee
-54.69.44.73:443,lttransactions.production.linktr.ee
-54.69.231.208:443,*.linktr.ee
-54.70.30.39:443,matching.qa.linktr.ee
-54.70.94.12:443,monolith-qa-juliett.linktr.ee
-54.70.138.229:443,monolith-qa-india.linktr.ee
-54.70.202.91:443,monolith-qa-lima.linktr.ee
-54.70.253.21:443,*.linktr.ee
-54.71.140.226:443,*.linktr.ee
