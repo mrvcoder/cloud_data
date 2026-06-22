@@ -1,0 +1,12 @@
+{
+  "keys": [
+    {
+      "kty": "RSA",
+      "kid": "canva-test-1",
+      "use": "sig",
+      "alg": "RS256",
+      "n": "wPII8cC53O9vF-TxealpBEsYxL_ehJe_5N6GsTJdC55_vqN_s0XMWXotaMHqXOjyCGeYF0LdB-Xy8tNQmPx-cwY71QX6mnQKQnhBI0lYU_3ionag2J2cpDjlmM_UzW-JucQ16NsppKPldbC4wWo5l9L_A19Q8v4fA6gDfZyxvcadYBtWigTo3FrxBMa4sbiodtD_Gdz8qCnaEyBXXsNfaMU_2lX1Wg8t5Cp2saiDPXTZKisvGQOzSkOPEVaKHLruspjXVHKEnZNGiAQSLftiKKEHlorADxSz782zHKt4Wupq4CXnpCU2Kx9_1uX5fzWfguEKuMno3pLP51zDroJNUQ",
+      "e": "AQAB"
+    }
+  ]
+}
